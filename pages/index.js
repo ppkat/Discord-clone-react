@@ -1,34 +1,7 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import appConfig from '../config.json';
-
-function GlobalStyle() {
-    return (
-      <style global jsx>{`
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-          list-style: none;
-        }
-        body {
-          font-family: 'Open Sans', sans-serif;
-        }
-        /* App fit Height */ 
-        html, body, #__next {
-          min-height: 100vh;
-          display: flex;
-          flex: 1;
-        }
-        #__next {
-          flex: 1;
-        }
-        #__next > * {
-          flex: 1;
-        }
-        /* ./App fit Height */ 
-      `}</style>
-    );
-  }
+import React from 'react';
+import { useRouter } from 'next/router';
 
 function PageTitle(tag) {
     const Type = tag.type || 'h1'
@@ -50,13 +23,27 @@ function PageTitle(tag) {
         
     )
 }
-
+//main function
 export default function PaginaInicial() {
-  let username = 'ppkat';
+  //reload the username through the react 
+  const [username, setUsername] = React.useState('ppkat')
+
+  //routing with next
+  const routing = useRouter();
+
+  //github profile image
+  const userImage = `https://github.com/${username}.png`
+
+  //github profile info
+  const [userInfo, setUserInfo] = React.useState(username)
+  React.useEffect( () => {
+    fetch(`https://api.github.com/users/${username}`)
+    .then(response => response.json())
+    .then(data => setUserInfo(data))
+  }, [])
 
   return (
     <>
-      <GlobalStyle />
       <Box
         styleSheet={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -83,6 +70,12 @@ export default function PaginaInicial() {
           {/* Formulário */}
           <Box
             as="form"
+            onSubmit={(ev)=>{
+              ev.preventDefault()
+              routing.push('/chat')
+              
+              //window.location.href = '/chat' //troca de página a partir das rotas
+            }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
@@ -95,6 +88,12 @@ export default function PaginaInicial() {
 
             <TextField
               fullWidth
+              value={username}
+              onChange={(ev)=>{
+                const value = ev.target.value;
+                setUsername(value);
+
+              }}
               textFieldColors={{
                 neutral: {
                   textColor: appConfig.theme.colors.neutrals[200],
@@ -129,7 +128,7 @@ export default function PaginaInicial() {
               padding: '16px',
               backgroundColor: appConfig.theme.colors.neutrals[800],
               border: '1px solid',
-              borderColor: appConfig.theme.colors.neutrals[999],
+              borderColor: appConfig.theme.colors.primary[800],
               borderRadius: '10px',
               flex: 1,
               minHeight: '240px',
@@ -139,8 +138,19 @@ export default function PaginaInicial() {
               styleSheet={{
                 borderRadius: '50%',
                 marginBottom: '16px',
+                borderColor: 'rgba(199, 21, 240, 0.2)',
+                borderWidth: '3px',
+                borderStyle: 'solid'
               }}
-              src={`https://github.com/${username}.png`}
+              src={/*()=>{
+                if(username.length == 0){
+                  return(`https://github.com/${username}.png`)
+                }
+                else{
+                  return(userImage)
+                }
+              }*/
+              `https://github.com/${username}.png`}
             />
             <Text
               variant="body4"
@@ -148,7 +158,8 @@ export default function PaginaInicial() {
                 color: appConfig.theme.colors.neutrals[200],
                 backgroundColor: appConfig.theme.colors.neutrals[900],
                 padding: '3px 10px',
-                borderRadius: '1000px'
+                borderRadius: '1000px',
+                maxWidth: '200px'
               }}
             >
               {username}
