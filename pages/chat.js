@@ -1,24 +1,47 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React from 'react';
 import appConfig from '../config.json';
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_ANON_KEY =
+ 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzQ4OTM5MCwiZXhwIjoxOTU5MDY1MzkwfQ.U7n6ZTfcuLzyObgrxJlip5YuWuLheFoVb2MJpmRgdG0'
+const SUPABASE_URL = 'https://gorbyenjquyjljejfxox.supabase.co'
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 export default function ChatPage() {
 
     const [mensagem, setMensagem] = React.useState('');
     const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
+    
+    React.useEffect(() => {
+        supabaseClient.from('mensagens').select('*').order('created_at',{ascending: false}).then(({ data }) => {
+            console.log(data)
+            setListaDeMensagens(data)
+          })
+
+          return(<Loading/>)
+    }, [])
+
+    function insereNoBanco(mensagem) {
+        supabaseClient.from('mensagens').insert([
+            mensagem
+        ]).then(({ data }) => {
+            setListaDeMensagens([
+                data[0],
+                ...listaDeMensagens,
+            ]);
+            setMensagem('');
+        })
+    }
 
     function handleNovaMensagem(novaMensagem) {
         const mensagem = {
-            id: listaDeMensagens.length + 1,
-            de: 'ppkat',
-            texto: novaMensagem,
+            //id: listaDeMensagens.length + 1,
+            usuario: 'ppkat',
+            mensagem: novaMensagem,
         };
 
-        setListaDeMensagens([
-            mensagem,
-            ...listaDeMensagens,
-        ]);
-        setMensagem('');
+        insereNoBanco(mensagem)
     }
 
     return (
@@ -59,13 +82,7 @@ export default function ChatPage() {
                     }}
                 >
                     <MessageList mensagens={listaDeMensagens} />
-                    {/* {listaDeMensagens.map((mensagemAtual) => {
-                        return (
-                            <li key={mensagemAtual.id}>
-                                {mensagemAtual.de}: {mensagemAtual.texto}
-                            </li>
-                        )
-                    })} */}
+                    
                     <Box
                         as="form"
                         styleSheet={{
@@ -164,7 +181,7 @@ function MessageList(props) {
                                     display: 'inline',
                                     marginRight: '8px',
                                 }}
-                                src={`https://github.com/ppkat.png`}
+                                src={`https://github.com/${mensagem.usuario}.png`}
                             />
                             <Text
                              tag="span"
@@ -175,12 +192,12 @@ function MessageList(props) {
                                 margin: '0',
                              }}
                              >
-                                {mensagem.de}
+                                {mensagem.usuario}
                             </Text>
                             <Text 
                                 variant='body2'
                             >
-                                {mensagem.texto}
+                                {mensagem.mensagem}
                             </Text>
                             <Text
                                 styleSheet={{
@@ -198,4 +215,15 @@ function MessageList(props) {
             })}
         </Box>
     )
+}
+
+function Loading(p) {
+    <Box 
+        tag='div'
+        styleSheet={{
+            width: '300px',
+            height: '400px',
+            backgroundColor: 'red',
+        }}
+    ></Box>
 }

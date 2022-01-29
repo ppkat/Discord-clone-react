@@ -36,11 +36,6 @@ export default function PaginaInicial() {
 
   //github profile info
   const [userInfo, setUserInfo] = React.useState(username)
-  /*React.useEffect( () => {
-    fetch(`https://api.github.com/users/${username}`)
-    .then(response => response.json())
-    .then(data => setUserInfo(data))
-  }, [])*/
 
   return (
     <>
