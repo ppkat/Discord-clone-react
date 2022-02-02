@@ -1,7 +1,10 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React from 'react';
 import appConfig from '../config.json';
+import { useRouter } from 'next/router';
 import { createClient } from '@supabase/supabase-js';
+import { ButtonSendSticker } from '../src/components/ButtonSendSticker'
+import { ButtonSendMessages } from '../src/components/ButtonSendMessage';
 
 const SUPABASE_ANON_KEY =
  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzQ4OTM5MCwiZXhwIjoxOTU5MDY1MzkwfQ.U7n6ZTfcuLzyObgrxJlip5YuWuLheFoVb2MJpmRgdG0'
@@ -9,13 +12,14 @@ const SUPABASE_URL = 'https://gorbyenjquyjljejfxox.supabase.co'
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 export default function ChatPage() {
-
+    const roteamento = useRouter()
+    const usuarioLogado = roteamento.query.username
     const [mensagem, setMensagem] = React.useState('');
     const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
     
     React.useEffect(() => {
         supabaseClient.from('mensagens').select('*').order('created_at',{ascending: false}).then(({ data }) => {
-            console.log(data)
+            //console.log(data)
             setListaDeMensagens(data)
           })
 
@@ -37,7 +41,7 @@ export default function ChatPage() {
     function handleNovaMensagem(novaMensagem) {
         const mensagem = {
             //id: listaDeMensagens.length + 1,
-            usuario: 'ppkat',
+            usuario: usuarioLogado,
             mensagem: novaMensagem,
         };
 
@@ -114,7 +118,11 @@ export default function ChatPage() {
                                 marginRight: '12px',
                                 color: appConfig.theme.colors.neutrals[200],
                             }}
-                        />
+                        >
+                            <ButtonSendMessages/>
+                        </TextField>
+                        <ButtonSendMessages/>
+                        <ButtonSendSticker/>
                     </Box>
                 </Box>
             </Box>
@@ -141,6 +149,7 @@ function Header() {
 }
 
 function MessageList(props) {
+    console.log(props.mensagens.mensagem)
     return (
         <Box
             tag="ul"

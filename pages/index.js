@@ -25,17 +25,52 @@ function PageTitle(tag) {
 }
 //main function
 export default function PaginaInicial() {
-  //reload the username through the react 
+  //declarando a variavel username a partir do react
   const [username, setUsername] = React.useState('ppkat')
 
-  //routing with next
+  //roteamento com o next
   const routing = useRouter();
 
-  //github profile image
+  //imagem do perfil do github
   const userImage = `https://github.com/${username}.png`
 
-  //github profile info
-  const [userInfo, setUserInfo] = React.useState(username)
+  //informações do perfil do github
+  const [userInfo, setUserInfo] = React.useState({
+    followers: '',
+    following: '',
+    name: '',
+    createdAt: '',
+    lastLogin: '',
+    email: '',
+    location: '',
+    repositories: '',
+    bio: ''
+  })
+
+  //atualiza a variavel userInfo com as informações do username atual
+  function getUserInfo(){
+    fetch(`https://api.github.com/users/${username}`).then((res)=>{
+      return res.json()      
+    }).then((res)=>{
+      console.log(res)
+      const newUserInfo = {
+        followers: res.followers,
+        following: res.following,
+        name: res.name,
+        createdAt: res.created_at,
+        lastLogin: res.updated_at,
+        email: res.email,
+        location: res.location,
+        repositories: res.public_repos,
+        bio: res.bio
+      }
+
+      setUserInfo(newUserInfo)
+
+    })
+  }
+
+  //getUserInfo()
 
   return (
     <>
@@ -67,7 +102,8 @@ export default function PaginaInicial() {
             as="form"
             onSubmit={(ev)=>{
               ev.preventDefault()
-              routing.push('/chat')
+              //passando o usuário para o /chat com a informação do username que ele digitou a partir da URL
+              routing.push(`/chat?username=${username}`)
               
               //window.location.href = '/chat' //troca de página a partir das rotas
             }}
@@ -119,7 +155,6 @@ export default function PaginaInicial() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              maxWidth: '200px',
               padding: '16px',
               backgroundColor: appConfig.theme.colors.neutrals[800],
               border: '1px solid',
@@ -127,6 +162,7 @@ export default function PaginaInicial() {
               borderRadius: '10px',
               flex: 1,
               minHeight: '240px',
+              maxWidth: '240px',
             }}
           >
             <Image
@@ -137,27 +173,31 @@ export default function PaginaInicial() {
                 borderWidth: '3px',
                 borderStyle: 'solid'
               }}
-              src={/*()=>{
-                if(username.length == 0){
-                  return(`https://github.com/${username}.png`)
-                }
-                else{
-                  return(userImage)
-                }
-              }*/
-              `https://github.com/${username}.png`}
+              src={
+                username.length == 0?
+                '/github.png'
+                :
+                userImage
+              }
             />
             <Text
               variant="body4"
+              className='campo-de-exibicao-username'
               styleSheet={{
                 color: appConfig.theme.colors.neutrals[200],
                 backgroundColor: appConfig.theme.colors.neutrals[900],
                 padding: '3px 10px',
                 borderRadius: '1000px',
-                maxWidth: '200px'
               }}
             >
-              {username}
+              {
+                username.length === 0?
+                'Insira seu perfil do github'
+                :
+                username
+              }
+              <br/>
+              {}
             </Text>
           </Box>
           {/* Photo Area */}
