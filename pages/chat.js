@@ -11,6 +11,14 @@ const SUPABASE_ANON_KEY =
 const SUPABASE_URL = 'https://gorbyenjquyjljejfxox.supabase.co'
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
+function realTimeListener(callbackfunc){
+    supabaseClient.from('mensagens').on('*', (data)=>{
+        //console.log(data)
+        callbackfunc(data.new)
+    })
+    .subscribe()
+}
+
 export default function ChatPage() {
     const roteamento = useRouter()
     const usuarioLogado = roteamento.query.username
@@ -23,7 +31,12 @@ export default function ChatPage() {
             setListaDeMensagens(data)
           })
 
-          return(<Loading/>)
+        realTimeListener((novaMensagem)=>{
+            
+            setListaDeMensagens(valorAtualLista => [novaMensagem, ...valorAtualLista])
+        })
+
+        //   return(<Loading/>)
     }, [])
 
     function insereNoBanco(mensagem) {
@@ -149,7 +162,7 @@ function Header() {
 }
 
 function MessageList(props) {
-    console.log(props.mensagens.mensagem)
+    //console.log(props.mensagens.mensagem)
     return (
         <Box
             tag="ul"
