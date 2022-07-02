@@ -42,13 +42,7 @@ export default function ChatPage() {
     function insereNoBanco(mensagem) {
         supabaseClient.from('mensagens').insert([
             mensagem
-        ]).then(({ data }) => {
-            setListaDeMensagens([
-                data[0],
-                ...listaDeMensagens,
-            ]);
-            setMensagem('');
-        })
+        ]).then(({ data }) => setMensagem(''))
     }
 
     function handleNovaMensagem(novaMensagem) {
