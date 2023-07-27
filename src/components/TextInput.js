@@ -1,0 +1,29 @@
+export default () => (
+    <TextField
+        value={mensagem}
+        onChange={(event) => {
+            const valor = event.target.value;
+            setMensagem(valor);
+        }}
+        onKeyPress={(event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                handleNovaMensagem(mensagem);
+            }
+        }}
+        placeholder="Digite aqui"
+        type="textarea"
+        styleSheet={{
+            width: '100%',
+            border: '0',
+            resize: 'none',
+            borderRadius: '5px',
+            padding: '6px 8px',
+            backgroundColor: appConfig.theme.colors.neutrals[800],
+            marginRight: '12px',
+            color: appConfig.theme.colors.neutrals[200],
+        }}
+    >
+        <ButtonSendMessages />
+    </TextField>
+)

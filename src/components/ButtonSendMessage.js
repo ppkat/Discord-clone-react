@@ -3,22 +3,20 @@ import { Box, Button, Text, Image } from '@skynexui/components';
 import appConfig from '../../config.json';
 import { handleNovaMensagem } from '../../pages/index'
 
-export function ButtonSendMessages() {
-
-    return (
-        <Box
-            styleSheet={{
-                position: 'relative',
+export default () => (
+    <Box
+        styleSheet={{
+            position: 'relative',
+        }}
+    >
+        <Button
+            buttonColors={{
+                contrastColor: '#FFFFFF',
+                mainColorLight: appConfig.theme.colors.primary[300],
+                mainColorStrong: appConfig.theme.colors.primary[600]
             }}
-        >
-            <Button
-                buttonColors={{
-                    contrastColor: '#FFFFFF',
-                    mainColorLight: appConfig.theme.colors.primary[300],
-                    mainColorStrong: appConfig.theme.colors.primary[600]
-                }}
-                size="xl"
-                variant="secondary"
+            size="xl"
+            variant="secondary"
 
             styleSheet={{
                 minWidth: '50px',
@@ -37,6 +35,5 @@ export function ButtonSendMessages() {
         >
 
         </Button>
-        </Box >
-    )
-}
+    </Box >
+)
