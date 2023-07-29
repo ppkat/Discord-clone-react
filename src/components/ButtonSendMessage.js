@@ -1,9 +1,8 @@
 import React from 'react';
 import { Box, Button, Text, Image } from '@skynexui/components';
 import appConfig from '../../config.json';
-import { handleNovaMensagem } from '../../pages/index'
 
-export default () => (
+export default ({ handleMessageFunc }) => (
     <Box
         styleSheet={{
             position: 'relative',
@@ -31,7 +30,7 @@ export default () => (
                     backgroundImage: 'url(/sendButton.png)'
                 }
             }}
-            onClick={handleNovaMensagem}
+            onClick={handleMessageFunc}
         >
 
         </Button>

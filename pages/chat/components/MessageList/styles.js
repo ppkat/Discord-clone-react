@@ -95,15 +95,3 @@ export function MessageDate({ message }) {
     )
 
 }
-
-export function SenderGadgetsContainer({ children }) {
-    return (
-        <Box
-            as="form"
-            styleSheet={{
-                display: 'flex',
-                alignItems: 'center',
-            }}
-        ></Box>
-    )
-}

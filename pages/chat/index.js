@@ -7,12 +7,9 @@ import TextInput from '../../src/components/TextInput';
 import { BackgroundImageContainer, ExternalContainer, MessageListAndTextSenderContainer } from './styles'
 import Header from './components/Header';
 import MessageList from './components/MessageList';
-import { SenderGadgetsContainer } from './components/MessageList/styles';
+import { SenderGadgetsContainer } from './styles';
 
-const SUPABASE_ANON_KEY =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzQ4OTM5MCwiZXhwIjoxOTU5MDY1MzkwfQ.U7n6ZTfcuLzyObgrxJlip5YuWuLheFoVb2MJpmRgdG0'
-const SUPABASE_URL = 'https://gorbyenjquyjljejfxox.supabase.co'
-const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+const supabaseClient = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
 function realTimeListener(callbackfunc) {
     supabaseClient.from('mensagens').on('*', (data) => {
@@ -65,9 +62,10 @@ export default function ChatPage() {
 
                     <SenderGadgetsContainer>
 
-                        <ButtonSendMessages />
+                        <TextInput handleMessageFunc={handleNovaMensagem} mensagem={mensagem} setMensagem={setMensagem}>
+                            <ButtonSendMessages handleMessageFunc={handleNovaMensagem} />
+                        </TextInput>
                         <ButtonSendSticker />
-                        <TextInput />
 
                     </SenderGadgetsContainer>
                 </MessageListAndTextSenderContainer>

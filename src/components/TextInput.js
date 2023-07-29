@@ -1,4 +1,7 @@
-export default () => (
+import { TextField } from "@skynexui/components";
+import appConfig from '/config.json'
+
+export default ({ children, handleMessageFunc, mensagem, setMensagem }) => (
     <TextField
         value={mensagem}
         onChange={(event) => {
@@ -8,7 +11,7 @@ export default () => (
         onKeyPress={(event) => {
             if (event.key === 'Enter') {
                 event.preventDefault();
-                handleNovaMensagem(mensagem);
+                handleMessageFunc(mensagem);
             }
         }}
         placeholder="Digite aqui"
@@ -24,6 +27,6 @@ export default () => (
             color: appConfig.theme.colors.neutrals[200],
         }}
     >
-        <ButtonSendMessages />
+        {children}
     </TextField>
 )
