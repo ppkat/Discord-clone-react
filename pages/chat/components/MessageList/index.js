@@ -1,4 +1,5 @@
-import { Container, MessageContainer, MessageDate, ProfileUsername, UserMessage, UserPhoto } from "./styles";
+import { Container, MessageContainer, MessageInfoContainer, ProfileUsername, UserMessage, UserPhoto } from "./styles";
+import MessageDate from "/src/components/MessageDate";
 
 export default function MessageList(props) {
     //console.log(props.mensagens.mensagem)
@@ -9,10 +10,13 @@ export default function MessageList(props) {
                 return (
                     <MessageContainer message={mensagem}>
 
-                        <UserPhoto message={mensagem} />
-                        <ProfileUsername message={mensagem} />
+                        <MessageInfoContainer>
+                            <UserPhoto message={mensagem} />
+                            <ProfileUsername message={mensagem} />
+                            <MessageDate message={mensagem} />
+                        </MessageInfoContainer>
+
                         <UserMessage message={mensagem} />
-                        <MessageDate message={mensagem} />
                     </MessageContainer>
                 );
             })}

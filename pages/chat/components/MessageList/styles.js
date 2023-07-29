@@ -74,24 +74,24 @@ export function UserMessage({ message }) {
     return (
         <Text
             variant='body2'
+            styleSheet={{
+                paddingLeft: '53px'
+            }}
         >
             {message.mensagem}
         </Text>
     )
 }
 
-export function MessageDate({ message }) {
+export function MessageInfoContainer({ children }) {
     return (
-        <Text
+        <Box
             styleSheet={{
-                fontSize: '10px',
-                marginLeft: '8px',
-                color: appConfig.theme.colors.neutrals[300],
+                display: 'flex',
+                padding: '5px'
             }}
-            tag="span"
         >
-            {(new Date().toLocaleDateString())}
-        </Text>
+            {children}
+        </Box>
     )
-
 }

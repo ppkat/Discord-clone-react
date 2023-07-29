@@ -40,10 +40,11 @@ export default function ChatPage() {
     function insereNoBanco(mensagem) {
         supabaseClient.from('mensagens').insert([
             mensagem
-        ]).then(({ data }) => setMensagem(''))
+        ]).then(() => setMensagem(''))
     }
 
     function handleNovaMensagem(novaMensagem) {
+        if (!novaMensagem) return
         const mensagem = {
             //id: listaDeMensagens.length + 1,
             usuario: usuarioLogado,
