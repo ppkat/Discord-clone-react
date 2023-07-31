@@ -9,6 +9,7 @@ Estas são as tecnologias utilizadas no projeto:
 * React versão 17.0.2
 * Nextjs versão 12.0.8
 * Skynexui versão 1.24.2
+* Supabase
 
 
 ## Instalação
